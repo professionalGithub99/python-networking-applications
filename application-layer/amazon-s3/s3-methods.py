@@ -20,10 +20,11 @@ auth=aws4Auth.AWS4Auth(access_id,access_key,region,'s3')
 def create_bucket(bucket_name):
     #The logic is create bucket name refering to this syntax
     #https://docs.aws.amazon.com/AmazonS3/latest/API/API_CreateBucket.html
-    XML = ET.Elemet('CreateBucketConfiguration')
+    XML = ET.Element('CreateBucketConfiguration')
     endpoint= 'http://{}.s3.{}.amazonaws.com'.format(bucket_name,region)
     XML.attrib['xmlns'] =name_space
     location = ET.SubElement(XML, 'LocationConstraint')
+    print(type(XML),'aaaaa')
     location.text ='us-east-2'
     response=requests.put(endpoint,data=location,auth=auth)
     print(response.content)
@@ -54,10 +55,12 @@ def get_object(key_name,bucket_name):
     print(auth)
     print(res.status_code)
     print(res.headers)
+    print(res.content)
+    print(res.text)
 
 def get_object_with_session(key_name,bucket_name):
     endpoint='http://{}.s3.{}.amazonaws.com/{}'.format(bucket_name,region,key_name)
-    req=requests.Request(method='Get',url=endpoint,headers={'Content-Type':'image/jpeg','Host':'py-bucket3.s3.us-east-1.amazonaws.com'})
+    req=requests.Request(method='Get',url=endpoint,headers={'Content-Type':'image/jpeg'})
     r=req.prepare()
     session=requests.Session()
     s=session.send(r)
